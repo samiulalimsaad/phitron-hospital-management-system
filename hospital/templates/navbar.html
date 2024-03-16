@@ -1,0 +1,31 @@
+<nav class="bg-blue-500 p-4">
+    <div class="container mx-auto flex justify-between items-center">
+        <a href="{% url 'book_list' %}" class="text-white text-lg font-semibold"
+            >Carmart</a
+        >
+        <ul class="flex space-x-4">
+            {% if user.is_authenticated %}
+            <li>
+                <a href="{% url 'book_list' %}" class="text-white">Books</a>
+            </li>
+            <li>
+                <a href="{% url 'profile' %}" class="text-white">Profile</a>
+            </li>
+            <li>
+                <a href="{% url 'deposit' %}" class="text-white">Deposit</a>
+            </li>
+            <li>
+                <form action="{% url 'logout' %}" method="POST">
+                    {% csrf_token %}
+                    <button class="text-white">Logout</button>
+                </form>
+            </li>
+            {% else %}
+            <li><a class="text-white" href="{% url 'login' %}">Login</a></li>
+            <li>
+                <a class="text-white" href="{% url 'register' %}">Signup</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
