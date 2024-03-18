@@ -1,0 +1,128 @@
+{% include "base.html" %} {%load tailwind_filters %} {% block content %}
+
+<section class="bg-gray-100">
+    <header>
+        <div
+            class="hero min-h-screen"
+            style="
+                background-image: url(https://i.ibb.co/4FVB4DJ/camilo-jimenez-v-Gu08-RYj-O-s-unsplash.jpg);
+            "
+        >
+            <div class="hero-overlay bg-opacity-80"></div>
+            <div class="hero-content text-center text-neutral-content">
+                <div
+                    class="container mx-auto flex flex-col md:flex-row items-center justify-between px-8"
+                >
+                    <div class="md:w-1/2 mb-8 md:mb-0">
+                        <h1
+                            class="text-4xl md:text-6xl font-bold leading-tight mb-4"
+                        >
+                            Welcome to Our Hospital
+                        </h1>
+                        <p class="text-lg md:text-xl leading-relaxed mb-8">
+                            Providing quality healthcare services with care and
+                            compassion.
+                        </p>
+                        <a
+                            href="#book_appointment"
+                            class="btn btn-info btn-rounded"
+                            >Book an Appointment</a
+                        >
+                    </div>
+                    <div class="md:w-1/2">
+                        <img
+                            src="https://i.ibb.co/sJyQxZH/undraw-Doctors-p6aq-removebg-preview.png"
+                            alt="Hospital Image"
+                            class="drop-shadow-lg"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="container mx-auto py-8">
+        <!-- Search or Filter form -->
+        <section class="mb-8 bg-gray-100 py-8 px-4 md:px-8">
+            <div class="container mx-auto max-w-3xl">
+                <h2 class="text-2xl md:text-3xl font-semibold mb-4 text-center">
+                    Search for Doctors
+                </h2>
+                <form
+                    action="#"
+                    method="GET"
+                    class="flex flex-col md:flex-row items-center"
+                >
+                    <input
+                        type="text"
+                        name="search"
+                        placeholder="Search by name or expertise"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-md mb-4 md:mb-0 focus:outline-none focus:border-blue-500"
+                    />
+                    <button
+                        type="submit"
+                        class="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 transition duration-300"
+                    >
+                        Search
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Featured Doctors section -->
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-4">Featured Doctors</h2>
+            <div class="grid grid-cols-3 gap-4">
+                <!-- Doctor cards -->
+                <div class="border rounded p-4">
+                    <h3 class="font-semibold">Dr. John Doe</h3>
+                    <p>Specialty: Cardiology</p>
+                    <p>Location: City, Country</p>
+                </div>
+            </div>
+        </section>
+        <!-- Appointment Booking form -->
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-4">Book an Appointment</h2>
+            <form
+                action="#"
+                method="POST"
+                class="flex justify-center space-x-4"
+            >
+                <!-- Doctor dropdown -->
+                <select name="doctor" class="w-1/2 px-4 py-2 border rounded">
+                    <!-- Options -->
+                </select>
+                <!-- Date and Time picker -->
+                <input
+                    type="datetime-local"
+                    name="appointment_time"
+                    class="w-full px-4 py-2 border rounded"
+                />
+                <button
+                    type="submit"
+                    class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                >
+                    Book Appointment
+                </button>
+            </form>
+        </section>
+        <!-- Testimonials or Reviews section -->
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-4">Patient Testimonials</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Testimonial cards -->
+                <div class="border rounded p-4">
+                    <h3 class="font-semibold">Excellent Service!</h3>
+                    <p>Dr. Jane was very attentive and knowledgeable.</p>
+                    <p class="italic">- John Doe</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="bg-blue-500 text-white py-4">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Hospital Management System</p>
+        </div>
+    </footer>
+</section>
+{% endblock content %}
