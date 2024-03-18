@@ -1,10 +1,21 @@
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.views import View
+from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 
 from .forms import AppointmentForm, ReviewForm, UserRegistrationForm
-from .models import Doctor
+from .models import Doctor, Review
+
+
+class HomePageView(TemplateView):
+    template_name = "home.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["featured_doctors"] = Doctor.objects.all()[:3]
+        context["reviews"] = Review.objects.all()[:2]
+        return context
 
 
 class RegisterView(FormView):
@@ -13,9 +24,9 @@ class RegisterView(FormView):
 
     def form_valid(self, form):
         user = form.save()
-        user.refresh_from_db()  # Reload the user object to access the profile fields
+        user.refresh_from_db()
         user.email = form.cleaned_data.get("email")
-        user.is_active = False  # Deactivate until email confirmation
+        user.is_active = False
         user.save()
         messages.success(
             self.request,
