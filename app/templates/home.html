@@ -114,12 +114,16 @@
         <section class="mb-8">
             <h2 class="text-xl font-semibold mb-4">Patient Testimonials</h2>
             <div class="grid grid-cols-2 gap-4">
-                <!-- Testimonial cards -->
+                {% for review in reviews %}
                 <div class="border rounded p-4">
-                    <h3 class="font-semibold">Excellent Service!</h3>
-                    <p>Dr. Jane was very attentive and knowledgeable.</p>
-                    <p class="italic">- John Doe</p>
+                    <h3 class="font-semibold">
+                        {{review.doctor.user.username}} -
+                        {{review.rating|dividedby:5}}
+                    </h3>
+                    <p>{{review.comment}}</p>
+                    <p class="italic">- {{review.patient.user.username}}</p>
                 </div>
+                {% endfor %}
             </div>
         </section>
     </main>
