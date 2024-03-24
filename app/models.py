@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
@@ -10,7 +11,7 @@ class Doctor(models.Model):
     )
 
     def __str__(self):
-        return self.user.get_full_name()
+        return self.user.username
 
 
 class Patient(models.Model):
@@ -20,7 +21,7 @@ class Patient(models.Model):
     address = models.TextField()
 
     def __str__(self):
-        return self.user.get_full_name()
+        return self.user.username
 
 
 class Appointment(models.Model):
@@ -34,7 +35,7 @@ class Appointment(models.Model):
     review = models.TextField(blank=True)
 
     def __str__(self):
-        return f"{self.patient.user.get_full_name()}'s appointment with Dr. {self.doctor.user.get_full_name()}"
+        return f"{self.patient.user.username}'s appointment with Dr. {self.doctor.user.username}"
 
 
 class Review(models.Model):
@@ -42,8 +43,10 @@ class Review(models.Model):
     patient = models.ForeignKey(
         Patient, on_delete=models.CASCADE, related_name="reviews"
     )
-    rating = models.IntegerField()
+    rating = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
     comment = models.TextField()
 
     def __str__(self):
-        return f"Review by {self.patient.user.get_full_name()} for Dr. {self.doctor.user.get_full_name()}"
+        return f"Review by {self.patient.user.username} for Dr. {self.doctor.user.username}"

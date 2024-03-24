@@ -15,7 +15,7 @@ class HomePageView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["featured_doctors"] = Doctor.objects.all()[:3]
         context["doctors"] = Doctor.objects.all()
-        context["reviews"] = Review.objects.all()[:2]
+        context["reviews"] = Review.objects.all()
         return context
 
 
