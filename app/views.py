@@ -1,10 +1,14 @@
+import os
+
+import requests
 from django.contrib import messages
 from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, UpdateView
 from django.views.generic.edit import FormView
 
-from .forms import AppointmentForm, ReviewForm, UserRegistrationForm
+from .forms import AppointmentForm, DoctorForm, ReviewForm, UserRegistrationForm
 from .models import Doctor, Review
 
 
@@ -81,3 +85,28 @@ class SubmitReviewView(View):
             review.save()
             return redirect("review_confirmation")
         return render(request, "submit_review.html", {"form": form})
+
+
+class DoctorUpdateView(UpdateView):
+    model = Doctor
+    form_class = DoctorForm
+    template_name = "doctor_form.html"
+    success_url = reverse_lazy("success")
+
+    def form_valid(self, form):
+        imgbb_api_key = os.getenv("IMGBB")
+        profile_picture = form.cleaned_data["profile_picture"]
+        response = requests.post(
+            "https://api.imgbb.com/1/upload",
+            params={"key": imgbb_api_key},
+            files={"image": profile_picture.file},
+        )
+        if response.status_code == 200:
+            # Image uploaded successfully
+            url = response.json()["data"]["url"]
+            # Update doctor's profile picture URL
+            form.instance.profile_picture = url
+            return super().form_valid(form)
+        else:
+            # Image upload failed
+            return self.form_invalid(form)
