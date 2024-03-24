@@ -4,6 +4,7 @@ from django.urls import path
 from .views import (
     BookAppointmentView,
     DoctorProfileView,
+    DoctorUpdateView,
     HomePageView,
     RegisterView,
     SubmitReviewView,
@@ -25,4 +26,5 @@ urlpatterns = [
         SubmitReviewView.as_view(),
         name="submit_review",
     ),
+    path("update/<int:pk>/", DoctorUpdateView.as_view(), name="doctor_update"),
 ]
