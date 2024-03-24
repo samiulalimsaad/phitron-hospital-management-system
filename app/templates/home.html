@@ -72,16 +72,16 @@
         <section class="mb-8">
             <h2 class="text-xl font-semibold mb-4">Featured Doctors</h2>
             <div class="grid grid-cols-3 gap-4">
-                <!-- Doctor cards -->
+                {% for dr in featured_doctors %}
                 <div class="border rounded p-4">
-                    <h3 class="font-semibold">Dr. John Doe</h3>
-                    <p>Specialty: Cardiology</p>
-                    <p>Location: City, Country</p>
+                    <h3 class="font-semibold">{{dr.user.username}}</h3>
+                    <p>Specialty: {{dr.expertise}}</p>
                 </div>
+                {% endfor %}
             </div>
         </section>
         <!-- Appointment Booking form -->
-        <section class="mb-8">
+        <section id="book_appointment" class="mb-8">
             <h2 class="text-xl font-semibold mb-4">Book an Appointment</h2>
             <form
                 action="#"
@@ -90,7 +90,11 @@
             >
                 <!-- Doctor dropdown -->
                 <select name="doctor" class="w-1/2 px-4 py-2 border rounded">
-                    <!-- Options -->
+                    {% for doctor in doctors %}
+                    <option value="{{ doctor.id }}">
+                        {{ doctor.user.username }}
+                    </option>
+                    {% endfor %}
                 </select>
                 <!-- Date and Time picker -->
                 <input

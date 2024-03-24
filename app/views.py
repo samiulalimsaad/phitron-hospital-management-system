@@ -14,6 +14,7 @@ class HomePageView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["featured_doctors"] = Doctor.objects.all()[:3]
+        context["doctors"] = Doctor.objects.all()
         context["reviews"] = Review.objects.all()[:2]
         return context
 
