@@ -34,6 +34,11 @@ DEBUG = True
 DEBUG = os.getenv("DEVELOPMENT").lower() == "true"
 
 ALLOWED_HOSTS = ["phitron-hospital-management-system.onrender.com", "127.0.0.1"]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://phitron-hospital-management-system.onrender.com",
+    "http://127.0.0.1",
+]
 # Application definition
 
 INSTALLED_APPS = [
