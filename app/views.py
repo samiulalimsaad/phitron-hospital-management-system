@@ -26,6 +26,7 @@ class HomePageView(TemplateView):
 class RegisterView(FormView):
     template_name = "registration.html"
     form_class = UserRegistrationForm
+    success_url = reverse_lazy("home")
 
     def form_valid(self, form):
         user = form.save()
@@ -54,8 +55,8 @@ class DoctorProfileView(View):
 class BookAppointmentView(CreateView):
     model = Appointment
     form_class = AppointmentForm
-    template_name = "book_appointment.html"
-    success_url = reverse_lazy("appointment_confirmation")
+    template_name = "home.html"
+    success_url = reverse_lazy("+")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

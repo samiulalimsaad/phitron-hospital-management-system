@@ -17,6 +17,11 @@ urlpatterns = [
     path("logout/", LogoutView.as_view(next_page="home"), name="logout"),
     path("doctor/<int:doctor_id>/", DoctorProfileView.as_view(), name="doctor_profile"),
     path(
+        "book_appointment/",
+        BookAppointmentView.as_view(),
+        name="book_appointment",
+    ),
+    path(
         "book_appointment/<int:doctor_id>/",
         BookAppointmentView.as_view(),
         name="book_appointment",
