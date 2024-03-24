@@ -47,31 +47,37 @@ class DoctorProfileView(View):
         )
 
 
-class BookAppointmentView(FormView):
-    template_name = "book_appointment.html"
-    form_class = AppointmentForm
-
-    def form_valid(self, form):
-        doctor_id = self.kwargs["doctor_id"]
+class BookAppointmentView(View):
+    def get(self, request, doctor_id):
         doctor = Doctor.objects.get(id=doctor_id)
-        appointment = form.save(commit=False)
-        appointment.doctor = doctor
-        appointment.patient = self.request.user.patient
-        appointment.save()
-        messages.success(self.request, "Appointment booked successfully.")
-        return redirect("dashboard")
+        form = AppointmentForm()
+        return render(
+            request, "book_appointment.html", {"doctor": doctor, "form": form}
+        )
+
+    def post(self, request, doctor_id):
+        form = AppointmentForm(request.POST)
+        if form.is_valid():
+            appointment = form.save(commit=False)
+            appointment.doctor_id = doctor_id
+            appointment.patient = request.user
+            appointment.save()
+            return redirect("appointment_confirmation")
+        return render(request, "book_appointment.html", {"form": form})
 
 
-class SubmitReviewView(FormView):
-    template_name = "submit_review.html"
-    form_class = ReviewForm
-
-    def form_valid(self, form):
-        doctor_id = self.kwargs["doctor_id"]
+class SubmitReviewView(View):
+    def get(self, request, doctor_id):
         doctor = Doctor.objects.get(id=doctor_id)
-        review = form.save(commit=False)
-        review.doctor = doctor
-        review.patient = self.request.user.patient
-        review.save()
-        messages.success(self.request, "Review submitted successfully.")
-        return redirect("dashboard")
+        form = ReviewForm()
+        return render(request, "submit_review.html", {"doctor": doctor, "form": form})
+
+    def post(self, request, doctor_id):
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.doctor_id = doctor_id
+            review.patient = request.user
+            review.save()
+            return redirect("review_confirmation")
+        return render(request, "submit_review.html", {"form": form})
