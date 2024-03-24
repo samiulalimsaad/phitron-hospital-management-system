@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -28,10 +29,10 @@ SECRET_KEY = "django-insecure-5dp84*^_t4f&1%%syr&ous&jy#kv)&iyr0ebxa!0!1(rqu40#h
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.getenv("DEVELOPMENT").lower() == "true"
 
-ALLOWED_HOSTS = []
-
-
+ALLOWED_HOSTS = ["phitron-hospital-management-system.onrender.com", "127.0.0.1"]
 # Application definition
 
 INSTALLED_APPS = [
