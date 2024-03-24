@@ -21,7 +21,7 @@ class DoctorAdmin(admin.ModelAdmin):
                 params={"key": imgbb_api_key},
                 files={"image": profile_picture.file},
             )
-            print(response.status_code)
+
             if response.status_code == 200:
                 url = response.json()["data"]["url"]
                 obj.profile_picture = url

@@ -89,12 +89,17 @@
         <section id="book_appointment" class="mb-8">
             <h2 class="text-xl font-semibold mb-4">Book an Appointment</h2>
             <form
-                action="#"
+                id="book_appointment_form"
                 method="POST"
                 class="flex justify-center space-x-4"
             >
+                {% csrf_token %}
                 <!-- Doctor dropdown -->
-                <select name="doctor" class="w-1/2 px-4 py-2 border rounded">
+                <select
+                    id="doctor_dropdown"
+                    name="doctor"
+                    class="w-1/2 px-4 py-2 border rounded"
+                >
                     {% for doctor in doctors %}
                     <option value="{{ doctor.id }}">
                         {{ doctor.user.username }}
@@ -115,6 +120,19 @@
                 </button>
             </form>
         </section>
+
+        <script>
+            document
+                .getElementById("doctor_dropdown")
+                .addEventListener("change", function () {
+                    var selectedDoctorId = this.value;
+                    var formAction =
+                        "/book_appointment/" + selectedDoctorId + "/";
+                    document.getElementById("book_appointment_form").action =
+                        formAction;
+                });
+        </script>
+
         <!-- Testimonials or Reviews section -->
         <section class="mb-8">
             <h2 class="text-xl font-semibold mb-4">Patient Testimonials</h2>
