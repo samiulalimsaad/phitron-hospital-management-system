@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-from .models import Appointment, Review
+from .models import Appointment, Doctor, Review
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -23,3 +23,9 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ["rating", "comment"]
+
+
+class DoctorForm(forms.ModelForm):
+    class Meta:
+        model = Doctor
+        fields = ["expertise", "profile_picture"]
