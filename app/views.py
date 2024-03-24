@@ -5,11 +5,11 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, UpdateView
+from django.views.generic import CreateView, TemplateView, UpdateView
 from django.views.generic.edit import FormView
 
 from .forms import AppointmentForm, DoctorForm, ReviewForm, UserRegistrationForm
-from .models import Doctor, Review
+from .models import Appointment, Doctor, Review
 
 
 class HomePageView(TemplateView):
@@ -51,23 +51,23 @@ class DoctorProfileView(View):
         )
 
 
-class BookAppointmentView(View):
-    def get(self, request, doctor_id):
-        doctor = Doctor.objects.get(id=doctor_id)
-        form = AppointmentForm()
-        return render(
-            request, "book_appointment.html", {"doctor": doctor, "form": form}
-        )
+class BookAppointmentView(CreateView):
+    model = Appointment
+    form_class = AppointmentForm
+    template_name = "book_appointment.html"
+    success_url = reverse_lazy("appointment_confirmation")
 
-    def post(self, request, doctor_id):
-        form = AppointmentForm(request.POST)
-        if form.is_valid():
-            appointment = form.save(commit=False)
-            appointment.doctor_id = doctor_id
-            appointment.patient = request.user
-            appointment.save()
-            return redirect("appointment_confirmation")
-        return render(request, "book_appointment.html", {"form": form})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["doctors"] = Doctor.objects.all()
+
+        return context
+
+    def form_valid(self, form):
+        form.instance.doctor_id = self.kwargs["doctor_id"]
+        form.instance.patient = self.request.user
+        print({"doctor_id": form.instance.doctor_id, "patient": form.instance.patient})
+        return super().form_valid(form)
 
 
 class SubmitReviewView(View):
