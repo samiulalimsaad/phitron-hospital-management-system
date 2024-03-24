@@ -5,6 +5,7 @@
     <section id="book_appointment" class="mb-8">
         <form
             id="book_appointment_form"
+            action="{% url 'book_appointment' %}"
             method="POST"
             class="flex justify-center space-x-4"
         >
@@ -35,16 +36,5 @@
             </button>
         </form>
     </section>
-
-    <script>
-        document
-            .getElementById("doctor_dropdown")
-            .addEventListener("change", function () {
-                var selectedDoctorId = this.value;
-                var formAction = "/book_appointment/" + selectedDoctorId + "/";
-                document.getElementById("book_appointment_form").action =
-                    formAction;
-            });
-    </script>
 </div>
 {% endblock %}

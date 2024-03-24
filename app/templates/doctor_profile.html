@@ -10,22 +10,32 @@
         />
         {% endcomment %}
         <p><strong>Username:</strong> {{ doctor.user.username }}</p>
-        <p><strong>Email:</strong> {{ doctor.user.email }}</p>
-        <p><strong>Expertise:</strong> {{ doctor.expertise }}</p>
-        <h3 class="text-lg font-semibold mt-4 mb-2">Appointments</h3>
-        {% if appointments %}
-        <ul class="menu rounded-box">
-            {% for appointment in appointments %}
-            <li>
-                <a>
-                    {{ appointment.appointment_date }} - {{appointment.patient}}
-                </a>
-            </li>
-            {% endfor %}
-        </ul>
+        <p>
+            <strong>Email:</strong> {% if doctor.user.email %} {{
+            doctor.user.email }}
+        </p>
         {% else %}
-        <p>No appointments yet.</p>
+        <span class="text-slate-300"> Not provided </span>
         {% endif %}
+
+        <p><strong>Expertise:</strong> {{ doctor.expertise }}</p>
+        <div class="card border px-4 py-2 my-4">
+            <h3 class="text-lg font-semibold mt-4 mb-2">Appointments:</h3>
+            {% if appointments %}
+            <ul class="menu rounded-box">
+                {% for appointment in appointments %}
+                <li>
+                    <a>
+                        {{ appointment.appointment_date }} -
+                        {{appointment.patient}}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No appointments yet.</p>
+            {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}
