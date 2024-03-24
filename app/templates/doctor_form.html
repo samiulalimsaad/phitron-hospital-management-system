@@ -1,0 +1,19 @@
+{% include "base.html" %} {%load tailwind_filters %} {% block content %}
+<div class="container mx-auto">
+    <h2 class="text-2xl font-semibold mb-4">Update Doctor Profile</h2>
+    <form
+        action="{% url 'doctor_create' %}"
+        method="post"
+        class="w-full max-w-lg"
+        enctype="multipart/form-data"
+    >
+        {% csrf_token %} {{ form|crispy }}
+        <button
+            type="submit"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+        >
+            Submit
+        </button>
+    </form>
+</div>
+{% endblock %}
