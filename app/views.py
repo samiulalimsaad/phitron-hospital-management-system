@@ -2,10 +2,15 @@ import os
 
 import requests
 from django.contrib import messages
+from django.contrib.auth import get_user_model
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import send_mail
 from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, TemplateView, UpdateView
+from django.views.generic import CreateView, FormView, TemplateView, UpdateView
 from django.views.generic.edit import FormView
 
 from .forms import AppointmentForm, DoctorForm, ReviewForm, UserRegistrationForm
@@ -23,21 +28,89 @@ class HomePageView(TemplateView):
         return context
 
 
+def verification_failed(request):
+    return render(request, "verification_failed.html")
+
+
+def verify_email(request):
+    User = get_user_model()
+    print("1")
+    if request.method == "GET":
+        print("2")
+        try:
+            # Extract user ID and token from URL parameters
+            user_id = request.GET.get("uid")
+            print("3", user_id)
+            id = int(user_id)
+            print("3", id)
+            token = request.GET.get("token")
+            print("4")
+
+            # Retrieve user object
+            user = User.objects.get(pk=id)
+            print("5")
+
+            print("inside get", user)
+            # Verify the token
+
+            print("6")
+            print("inside get")
+            # Mark the user as active
+            user.is_active = True
+            user.save()
+            messages.success(
+                request,
+                "Your email has been verified successfully. You can now log in.",
+            )
+            return redirect("login")
+
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist) as e:
+            print(e)
+            messages.error(request, "Invalid verification link.")
+
+    # Redirect to a failure page or display an error message
+    return redirect("verification_failed")
+
+
 class RegisterView(FormView):
     template_name = "registration.html"
     form_class = UserRegistrationForm
     success_url = reverse_lazy("home")
 
     def form_valid(self, form):
-        user = form.save()
-        user.refresh_from_db()
-        user.email = form.cleaned_data.get("email")
+        # Save the user without marking them as active
+        user = form.save(commit=False)
         user.is_active = False
         user.save()
+
+        # Generate verification token
+        token = default_token_generator.make_token(user)
+        print("Verification token generated for user ", (user.id))
+
+        # Construct verification URL
+        current_site = get_current_site(self.request)
+        verification_url = (
+            f"http://{current_site.domain}/verify-email/?uid={user.id}&token={token}"
+        )
+
+        # Send verification email
+        send_mail(
+            "Verify Your Email",
+            render_to_string(
+                "emails/verification_email.html", {"verification_url": verification_url}
+            ),
+            "no-reply@hospital.com",
+            [user.email],
+            fail_silently=False,
+        )
+
+        # Display success message
         messages.success(
             self.request,
-            "Account created successfully. Check your email for verification link.",
+            "Account created successfully. Check your email for a verification link.",
         )
+
+        # Redirect to the login page
         return redirect("login")
 
 
