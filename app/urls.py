@@ -8,6 +8,8 @@ from .views import (
     HomePageView,
     RegisterView,
     SubmitReviewView,
+    verification_failed,
+    verify_email,
 )
 
 urlpatterns = [
@@ -32,4 +34,6 @@ urlpatterns = [
         name="submit_review",
     ),
     path("update/<int:pk>/", DoctorUpdateView.as_view(), name="doctor_update"),
+    path("verification_failed/", verification_failed, name="verification_failed"),
+    path("verify-email/", verify_email, name="verify_email"),
 ]
